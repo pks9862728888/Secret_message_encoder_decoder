@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import os
 import time
 from random import random, randrange, seed
@@ -79,7 +80,6 @@ def display_rules():
          \n    \t3. Sentences can be terminated by full stop(.)\
          \n    \t4. No numeric or special characters are allowed.')
     print('\nWARNING: Characters not mentioned above will be ignored.')
-    print('\n************************************************************')
 
 
 def get_message():
@@ -147,6 +147,7 @@ def get_message():
                 elif reenter_message == '2' or reenter_message == 're-enter':
                     print()
                     display_rules()
+                    get_message()
                     break
                 elif reenter_message == '1' or reenter_message == 'encode':
                     print('\n************************************************************')
@@ -156,10 +157,10 @@ def get_message():
                     print('\n************************************************************')
                     print('Invalid Response. Press 1, 2 or 3.\n')
         else:
-            print('\n******************* MESSAGE TO BE ENCODED ******************')
+            print('\n******************* MESSAGE TO BE ENCODED ******************\n')
             print(''.join(valid_message))
             print('\n********************** ENCODING MESSAGE ********************')
-            print('Just a few moments....')
+            print('\nJust a few moments....')
 
         return ''.join(valid_message).lower()
 
@@ -226,6 +227,7 @@ def encode_message(path_script, source_letter_path, message):
     # Changing back to initial directory
     os.chdir(path_script)
 
+    print('\nMessage has been encoded successfully.\nOutput Folder: ', destination_path)
     print('\nThis took about {} seconds'.format(time.time() - start_time))
 
 
