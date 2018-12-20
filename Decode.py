@@ -129,6 +129,33 @@ def get_file():
                     # If decode path is obtained then exiting
                     if decode_path_obtained_flag:
                         break
+            else:
+                while True:
+                    print('********************************************************************')
+                    print('\nIs the folder you want to decode listed here?')
+                    print('Select the folder you want to decode: ')
+
+                    response_choice = []
+                    for index, file in enumerate(file_names):
+                        print('\t{}. {}'.format(index, file))
+                        response_choice.append(str(index))
+
+                    print('\nEnter a number from numbers listed above:')
+                    response = input('Press Q if the folder you want to decode is not listed here....\n')
+                    response = response.lower()
+
+                    if response == 'q':
+                        print('\n********************************************************************')
+                        print('\nWe are SORRY for inconvenience.')
+                        print('Restart the program and choose to manually input the location of file.')
+                        print('\n************************* T H A N K  Y O U **************************')
+                        quit(0)
+                    elif response in response_choice:
+                        decode_path = path_script + separator + file_names[int(response)]
+                        decode_path_obtained_flag = True
+                        break
+                    else:
+                        print('\nINVALID RESPONSE. Please choose a number from the available options.')
         else:
             print('\n********************************************************************')
             print("INVALID INPUT. Type 'yes' or 'no'.")
@@ -195,9 +222,6 @@ def decode_file(decode_folder_path, path_script):
     print('\n**************** D E C O D I N G    M E S S A G E *******************')
     for file in file_names:
         modified_file_name = file
-
-        # Changing from hidden to visible
-        modified_file_name.lstrip('.')
 
         # Removing fake extensions
         extensions = ['.txt', '.zip', '.html', '.css', '.docx', '.jpg']

@@ -88,7 +88,7 @@ def check_dependencies():
                           'bangalore.jpg', 'berkeley.jpg', 'chennai.jpg', 'houston.jpg', 'madrid.jpg',
                           'gainesville.jpg', 'bristol.jpg', 'edinbrugh.jpg', 'london.jpg', 'chicago.jpg',
                           'bogota.jpg', 'beijing.jpg', 'karachi.jpg', 'buenos aires.jpg', 'kiev.jpg',
-                          '.DS_Store', 'delhi.jpg', 'bucharest.jpg', 'jacksonville.jpg', 'colombo.jpg',
+                          'delhi.jpg', 'bucharest.jpg', 'jacksonville.jpg', 'colombo.jpg',
                           'barcelona.jpg', 'dallas.jpg', 'los angeles.jpg', 'ithaca.jpg']
 
         files_present = os.listdir(source_letter_path)
@@ -161,13 +161,13 @@ def get_message():
             # Asking whether user wants to reenter the message
             while True:
                 reenter_message = input('\nWould you like to re-enter your message? \nType:\n    1. yes\n    2. no\n')
-                reenter_message = reenter_message.lower()
+                response = yes_no_validation(reenter_message)
 
-                if reenter_message == '1' or reenter_message == 'yes' or reenter_message == 'y':
+                if response == 'yes':
                     print()
                     display_rules()
                     break
-                elif reenter_message == '2' or reenter_message == 'no' or reenter_message == 'n':
+                elif response == 'no':
                     print('\n******************** T H A N K  Y O U **********************')
                     quit(0)
                 else:
@@ -360,13 +360,9 @@ def main():
         while True:
             print('\n************************************************************')
             restart = input("Do you want to encode some other secret message? Type 'yes' or 'no'\n")
-            restart = restart.lower()
+            restart = yes_no_validation(restart)
 
-            if restart == 'yes' or restart == 'y' or restart == '1':
-                restart = 'yes'
-                break
-            elif restart == 'no' or restart == 'n' or restart == '2':
-                restart = 'no'
+            if restart == 'yes' or restart == 'no':
                 break
             else:
                 print("\nInvalid Input. Type yes or no.")
