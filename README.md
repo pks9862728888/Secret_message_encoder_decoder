@@ -2,15 +2,15 @@
 This script encodes message visually by letters in picture, and subsequently renames the picture by randomly generated numbers. By deleting the extension, adding fake extension, and ultimately by hiding the individual character files; the message is encoded.
 
 ## Execution instructions
-- For encoding message only alphanumeric characters, blank space and dot(.) are allowed.
-- For decoding message the message folder should be placed in the folder from where the script is run for automatic detection of the Encoded messages folder. Else you will have to manually mention the location of encoded messages folder.
+- For encoding message, only alphanumeric characters, blank space and dot(.) are allowed.
+- For decoding message, the message folder should be placed in the folder from where the script is run. This ensures automatic detection of the Encoded messages folder. Else you will have to manually mention the location of encoded messages folder.
 
 ### Working of Encoder.py
 - First user is prompted to enter a message.
 
 ![Enter message](https://github.com/pks9862728888/Secret_message_encoder/blob/master/Screenshots/Encoder%2000.png)
 
-- Then the message is scanned for invalid characters(if any).
+- Then the message is scanned for invalid characters(*if any*).
 - If invalid charactes are found then asked whether to encode the message by removing the invalid characters?
 - If user doesn't want to encode the message, then he can re-enter a new message.
 
@@ -32,7 +32,7 @@ Encoding the message is done by words present in *word_names.txt* file. If this 
 The encoding is done in three steps:
 1. First a random number is generated and then a random seed is generated to determine where the number will be inserted in encodable file name.
 2. Then after each character in new file name a random number is added.
-3. Then .jpg extention is removed and fake extentions are added to the pictures.
+3. Then *.jpg* extention is removed and fake extentions are added to the pictures.
 4. Finally a dot(.) is added to each picture names to render the letters invisible.
 5. Then the letters are renamed in output folder.
 
