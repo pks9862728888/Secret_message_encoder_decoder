@@ -4,6 +4,7 @@ import time
 from random import randint
 import shutil
 from shutil import get_terminal_size
+import urllib.request
 
 
 def yes_no_validation(response):
@@ -55,7 +56,8 @@ def check_dependencies():
     if not os.path.exists(word_names_file_path):
         print('\n********************** W A R N I N G ***********************')
         print('\nMissing file: word_list.txt\nLocation: ', path_script)
-        print('\nIGNORE IF YOU WANT TO ENTER MESSAGE LESS THAN 29 CHARACTERS')
+        print('\nIGNORE IF YOU HAVE ACTIVE INTERNET CONNECTION NOW.')
+        print('\nWORDS WILL BE FETCHED FROM INTERNET.')
         print('\n************************************************************')
 
         ignore = input('Press any key to continue. Enter q to quit....\n')
@@ -72,8 +74,9 @@ def check_dependencies():
     if not os.path.exists(source_letter_path):
         print('\n************************ E R R O R *************************')
         print('Alphabets folder is not found in\nLocation: ', path_script)
-        print('\n\nTroubleshooting tips:\
-        \nDownload and copy the Alphabets folder in above location from the git repository: ')
+        print('\n\nTroubleshooting tips:')
+        print('Download and copy the Alphabets folder in above location from the git repository: {}'
+              .format('https://github.com/pks9862728888/Secret_message_encoder.git'))
         print('\n******************** T H A N K  Y O U **********************')
         quit(0)
 
@@ -206,7 +209,7 @@ def get_message():
             print('\n******************* MESSAGE TO BE ENCODED ******************\n')
             print(''.join(valid_message))
             print('\n********************** ENCODING MESSAGE ********************')
-            print('\nJust a few moments....')
+            print('\nThis might take few moments. Please wait....')
 
         return ''.join(valid_message).lower()
 
@@ -247,89 +250,69 @@ def encode_message(path_script, source_letter_path, message, missing_file_flag):
                 break
 
     # Reading alphabet files from alphabet directory
-    source_alphabet_name = os.listdir(source_letter_path)
-    source_alphabet_name.sort()
+    full_source_alphabet_name = os.listdir(source_letter_path)
+    full_source_alphabet_name.sort()
 
-    # Deleting hidden system files from source_alphabet_name
-    for index, name in enumerate(source_alphabet_name):
+    # Deleting hidden system files from full_source_alphabet_name
+    for index, name in enumerate(full_source_alphabet_name):
         if name.startswith('.'):
-            del source_alphabet_name[index]
+            del full_source_alphabet_name[index]
 
     # Selecting a list of words equal to the number of letters in message(for renaming)
-    message_length = len(message)
     alphabets_new_names = []
 
-    if message_length <= len(source_alphabet_name):
-        alphabets_new_names.extend(source_alphabet_name)
+    # If word_list.txt file is not missing
+    if not missing_file_flag:
+        with open('word_names.txt', 'r') as rf:
+            word_list = rf.readline().split(',')
     else:
-        alphabets_new_names.extend(source_alphabet_name)
-        new_names_required_number = message_length - len(source_alphabet_name)
-
-        # If word_names.txt exists then read new alphabet file names from this file.
-        if not missing_file_flag:
-            with open('word_names.txt', 'r') as rf:
-                word_list = rf.readline().split(',')
-
-            words_in_word_list = len(word_list)
-
-            # Randomly selecting names from wordlist
-            for number in range(new_names_required_number + 1):
-                random_number = randint(0, words_in_word_list-1)
-                alphabets_new_names.append(word_list[random_number]+'.jpg')
-
-            del word_list
-            alphabets_new_names.sort()
-
-        # If word_name.txt does not exist, then try to collect names from internet. Else reenter message < 29 characters
-        else:
+        # Trying to fetch words from internet
+        word_list = []
+        
+        try:
+            url = 'https://raw.githubusercontent.com/pks9862728888/Secret_message_encoder/master/word_names.txt'
+            data = urllib.request.urlopen(url).read()
+            data = str(data)
+            word_list = data.split(',')
+        except:
+            shutil.rmtree(destination_path, ignore_errors=True)
             print('\n************************ E R R O R *************************')
-            print('\nMissing file: word_list.txt\nLocation: ', path_script)
-            print('\n************************** H E L P *************************')
-            print('\n1) Quit and Replace the missing file.\n2) Or RE-ENTER your message less than 29 characters.')
+            print('\nUnable to fetch words from internet.')
+            print('\nTroubleshooting tips:')
+            print('    1. Check your internet connection and try again.')
+            print('    2. Download and copy the word_names.txt file in:\n       Location: {}\n       Git repository: {}'\
+                  .format(path_script, 'https://github.com/pks9862728888/Secret_message_encoder.git'))
+            print('\n******************** T H A N K  Y O U **********************')
+            quit(0)
 
-            while True:
-                print('\n************************************************************')
-                print('Do you want to re-enter the message?')
-                re_enter_message = input("Type 'yes' to re-enter message 'no' to quit.\n")
+    words_in_word_list = len(word_list)
 
-                re_enter_message = yes_no_validation(re_enter_message)
+    # Randomly selecting names from word-list
+    for number in range(len(message)):
+        random_number = randint(0, words_in_word_list - 1)
+        alphabets_new_names.append(word_list[random_number] + '.jpg')
 
-                if re_enter_message == 'yes':
-                    message = get_message()
-                    message_length = len(message)
-                    if message_length > 28:
-                        print('\n************************ E R R O R *************************')
-                        print('\nYour message length was greater than 29 characters.')
-                    else:
-                        break
-
-                elif re_enter_message == 'no':
-                    shutil.rmtree(destination_path, ignore_errors=True)
-                    print('\nQuitting....')
-                    print('******************** T H A N K  Y O U **********************')
-                    quit(0)
-                else:
-                    print('\n************************** H E L P *************************')
-                    print("\nINVALID INPUT. Enter 'yes' or 'no'.")
+    del word_list
+    alphabets_new_names.sort()
 
     # Creating list of letters to find index of alphabets later
     alphabets = list('abcdefghijklmnopqrstuvwxyz. ')
 
     # Copying and encoding the the pictures by letters contained in message
     for index, letter in enumerate(message):
-
+        
         # Finding the alphabet name according to letter in message
-        letter_name = source_alphabet_name[alphabets.index(letter)]
+        alphabet_name = full_source_alphabet_name[alphabets.index(letter)]
 
         # Copying the alphabets in destination folder
         os.chdir(source_letter_path)
-        shutil.copy(letter_name, destination_path)
+        shutil.copy(alphabet_name, destination_path)
 
         # Renaming alphabets after copying
         os.chdir(destination_path)
-        os.rename(letter_name, alphabets_new_names[index])
-        print("Encoded letter '{}' with name '{}' to destination with name '{}'"\
-              .format(letter, letter_name, alphabets_new_names[index]))
+        os.rename(alphabet_name, alphabets_new_names[index])
+        os.chdir(source_letter_path)
+        print("Encoded letter '{}' with name '{}' to '{}'".format(letter, alphabet_name, alphabets_new_names[index]))
 
     # Changing back to initial directory
     os.chdir(path_script)
@@ -337,6 +320,7 @@ def encode_message(path_script, source_letter_path, message, missing_file_flag):
     print('\n************************************************************')
     print('\nMessage has been encoded successfully.\nOutput Folder: ', destination_path)
     print('\nThis took about {} seconds'.format(time.time() - start_time))
+
 
 def main():
     while True:
