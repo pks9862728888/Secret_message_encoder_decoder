@@ -238,6 +238,7 @@ def main():
         if response == 'no' or response == 'n' or response == '2':
             print('\nQuitting....')
             print('************************* T H A N K  Y O U **************************')
+            quit(0)
         elif response == 'yes' or response == 'y' or response == '1':
             print('\n'*get_terminal_size().lines)
             main()
