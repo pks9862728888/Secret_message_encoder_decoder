@@ -1,9 +1,31 @@
 #!/usr/bin/env python
 import os
 import time
-from random import random, randrange, seed
+from random import randint
 import shutil
 from shutil import get_terminal_size
+
+
+def yes_no_validation(response):
+    """
+    This maps different response to yes, no or other.
+
+    :param:
+        (str) response - The response chosen by the user
+
+    :return:
+        (str) return_value - Value after decoding the response. 'yes', 'no', or 'other'
+    """
+    response = response.lower()
+
+    if response == 'yes' or response == 'y' or response == '1':
+        return_value = 'yes'
+    elif response == 'no' or response == 'no' or response == 'n':
+        return_value = 'no'
+    else:
+        return_value = 'other'
+
+    return return_value
 
 
 def check_dependencies():
@@ -13,20 +35,42 @@ def check_dependencies():
     :return:
         (str) path_script - Path from where the script is run
         (str) source_letter_path - Path where the alphabets are to be found.
+        (boolean) missing_file_flag - Indicates whether word_names.txt file is missing or not
     """
+    print('\nChecking dependencies....')
+    missing_file_flag = False
+
     # Path from where the script is run
     path_script = os.getcwd()
 
     # Finding the path of the alphabets folder depending on OS
     if os.name == 'nt':
         source_letter_path = path_script + '\\Alphabets'
+        word_names_file_path = path_script + '\\word_names.txt'
     else:
         source_letter_path = path_script + '/Alphabets'
+        word_names_file_path = path_script + '/word_names.txt'
+
+    # If word_names folder does not exist then display error
+    if not os.path.exists(word_names_file_path):
+        print('\n********************** W A R N I N G ***********************')
+        print('\nMissing file: word_list.txt\nLocation: ', path_script)
+        print('\nIGNORE IF YOU WANT TO ENTER MESSAGE LESS THAN 29 CHARACTERS')
+        print('\n************************************************************')
+
+        ignore = input('Press any key to continue. Enter q to quit....\n')
+        ignore = ignore.lower()
+
+        if ignore == 'q':
+            print('\nQuitting....')
+            print('******************** T H A N K  Y O U **********************')
+            quit(0)
+        else:
+            missing_file_flag = True
 
     # If Alphabets folder does not exist then display error and quit
     if not os.path.exists(source_letter_path):
-        print('\nChecking dependencies....')
-        print('************************ E R R O R *************************')
+        print('\n************************ E R R O R *************************')
         print('Alphabets folder is not found in\nLocation: ', path_script)
         print('\n\nTroubleshooting tips:\
         \nDownload and copy the Alphabets folder in above location from the git repository: ')
@@ -54,8 +98,7 @@ def check_dependencies():
 
         # If some files are missing form alphabet folder then showing error and exiting.
         if len(missing_files):
-            print('\nChecking dependencies....')
-            print('************************ E R R O R *************************')
+            print('\n************************ E R R O R *************************')
             print('Total number of missing files: ', len(missing_files))
             print('\nLocation of missing files: ', source_letter_path)
             print('\nMissing file-names from Alphabets folder:')
@@ -67,15 +110,18 @@ def check_dependencies():
             print('\n******************** T H A N K  Y O U **********************')
             quit(0)
 
+    if not missing_file_flag:
+        print('All dependencies are satisfied!\n')
+
     os.chdir(path_script)
-    return path_script, source_letter_path
+    return path_script, source_letter_path, missing_file_flag
 
 
 def display_rules():
     """
     Displays the rules of entering message and what characters will be ignored.
     """
-    print('************************************************************')
+    print('************************** H E L P *************************')
     print('\nINSTRUCTIONS:\n    \t1. Alphabets from A-Z or a-z are allowed.\n    \t2. Words can be separated by spaces.\
          \n    \t3. Sentences can be terminated by full stop(.)\
          \n    \t4. No numeric or special characters are allowed.')
@@ -165,7 +211,7 @@ def get_message():
         return ''.join(valid_message).lower()
 
 
-def encode_message(path_script, source_letter_path, message):
+def encode_message(path_script, source_letter_path, message, missing_file_flag):
     """
     Copies the required alphabets to a folder named Encoded_message_output according to message,
     then it encodes the same with numbers and renames the file.
@@ -174,9 +220,7 @@ def encode_message(path_script, source_letter_path, message):
 
     :param:
         (str) path_script - Path from where the script is originally run
-    :param:
         (str) source_letter_path - Path of the alphabets folder
-    :param:
         (str) message - The message to be encoded
     """
 
@@ -206,40 +250,104 @@ def encode_message(path_script, source_letter_path, message):
     source_alphabet_name = os.listdir(source_letter_path)
     source_alphabet_name.sort()
 
-    # Deleting hidden file-names of system starting with dot (.)
-    for index, file in enumerate(source_alphabet_name):
-        if file.startswith('.'):
+    # Deleting hidden system files from source_alphabet_name
+    for index, name in enumerate(source_alphabet_name):
+        if name.startswith('.'):
             del source_alphabet_name[index]
+
+    # Selecting a list of words equal to the number of letters in message(for renaming)
+    message_length = len(message)
+    alphabets_new_names = []
+
+    if message_length <= len(source_alphabet_name):
+        alphabets_new_names.extend(source_alphabet_name)
+    else:
+        alphabets_new_names.extend(source_alphabet_name)
+        new_names_required_number = message_length - len(source_alphabet_name)
+
+        # If word_names.txt exists then read new alphabet file names from this file.
+        if not missing_file_flag:
+            with open('word_names.txt', 'r') as rf:
+                word_list = rf.readline().split(',')
+
+            words_in_word_list = len(word_list)
+
+            # Randomly selecting names from wordlist
+            for number in range(new_names_required_number + 1):
+                random_number = randint(0, words_in_word_list-1)
+                alphabets_new_names.append(word_list[random_number]+'.jpg')
+
+            del word_list
+            alphabets_new_names.sort()
+
+        # If word_name.txt does not exist, then try to collect names from internet. Else reenter message < 29 characters
+        else:
+            print('\n************************ E R R O R *************************')
+            print('\nMissing file: word_list.txt\nLocation: ', path_script)
+            print('\n************************** H E L P *************************')
+            print('\n1) Quit and Replace the missing file.\n2) Or RE-ENTER your message less than 29 characters.')
+
+            while True:
+                print('\n************************************************************')
+                print('Do you want to re-enter the message?')
+                re_enter_message = input("Type 'yes' to re-enter message 'no' to quit.\n")
+
+                re_enter_message = yes_no_validation(re_enter_message)
+
+                if re_enter_message == 'yes':
+                    message = get_message()
+                    message_length = len(message)
+                    if message_length > 28:
+                        print('\n************************ E R R O R *************************')
+                        print('\nYour message length was greater than 29 characters.')
+                    else:
+                        break
+
+                elif re_enter_message == 'no':
+                    shutil.rmtree(destination_path, ignore_errors=True)
+                    print('\nQuitting....')
+                    print('******************** T H A N K  Y O U **********************')
+                    quit(0)
+                else:
+                    print('\n************************** H E L P *************************')
+                    print("\nINVALID INPUT. Enter 'yes' or 'no'.")
 
     # Creating list of letters to find index of alphabets later
     alphabets = list('abcdefghijklmnopqrstuvwxyz. ')
 
     # Copying and encoding the the pictures by letters contained in message
-    for letter in message:
+    for index, letter in enumerate(message):
 
         # Finding the alphabet name according to letter in message
         letter_name = source_alphabet_name[alphabets.index(letter)]
 
-        # Copying the files in destination folder
+        # Copying the alphabets in destination folder
         os.chdir(source_letter_path)
         shutil.copy(letter_name, destination_path)
+
+        # Renaming alphabets after copying
+        os.chdir(destination_path)
+        os.rename(letter_name, alphabets_new_names[index])
+        print("Encoded letter '{}' with name '{}' to destination with name '{}'"\
+              .format(letter, letter_name, alphabets_new_names[index]))
 
     # Changing back to initial directory
     os.chdir(path_script)
 
+    print('\n************************************************************')
     print('\nMessage has been encoded successfully.\nOutput Folder: ', destination_path)
     print('\nThis took about {} seconds'.format(time.time() - start_time))
-
 
 def main():
     while True:
         print('************************************************************')
         print('********************** W E L C O M E ***********************')
+        print('************************************************************')
 
-        path_script, source_letter_path = check_dependencies()
+        path_script, source_letter_path, missing_file_flag = check_dependencies()
         display_rules()
         message = get_message()
-        encode_message(path_script, source_letter_path, message)
+        encode_message(path_script, source_letter_path, message, missing_file_flag)
 
         # Checking whether user wants to encode some other message
         while True:
