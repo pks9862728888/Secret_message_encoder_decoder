@@ -140,7 +140,7 @@ def get_message():
     """
     while True:
         print('\n*********************** INPUT MESSAGE **********************')
-        message = input('\nPLEASE ENTER YOUR MESSAGE:\n')
+        message = input('\nPLEASE ENTER YOUR MESSAGE:\n\n')
 
         valid_characters = list('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz .')
         invalid_characters = []
