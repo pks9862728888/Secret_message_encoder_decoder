@@ -6,13 +6,18 @@ This script encodes message by letters in picture, and subsequently renames the 
 -For decoding message the message folder should be placed in the folder from where the script is run for automatic detection of the Encoded messages folder. Else you will have to manually mention the location of encoded messages folder.
 
 ### Working of Encoder.py
--First user is prompted to enter a message.
+- First user is prompted to enter a message.
+
 ![Enter message](https://github.com/pks9862728888/Secret_message_encoder/blob/master/Screenshots/Encoder%2001.png)
--Then the message is scanned for invalid characters(if any).
--If invalid charactes are found then asked whether to encode the message by removing the invalid characters?
--If user doesn't want to encode the message, then he can re-enter a new message.
+
+- Then the message is scanned for invalid characters(if any).
+- If invalid charactes are found then asked whether to encode the message by removing the invalid characters?
+- If user doesn't want to encode the message, then he can re-enter a new message.
+
 ![Remove Invalids](https://github.com/pks9862728888/Secret_message_encoder/blob/master/Screenshots/Encoder%2001.png)
--If the user choses to encode the message, then the message is encoded.
+
+- If the user choses to encode the message, then the message is encoded.
+
 ![Encoding status](https://github.com/pks9862728888/Secret_message_encoder/blob/master/Screenshots/Encoder%2002.png)
 
 Each letter is encoded with a picture and subsequently the names are scrumbled and the pictures are hidden.
@@ -46,3 +51,5 @@ Decoding process is exactly opposite to that of Encoder.py. This script outputs 
 4. Then the files are renamed in source folder
 
 ![Output Folder After Decoding](https://github.com/pks9862728888/Secret_message_encoder/blob/master/Screenshots/Output%20after%20Decoding.png)
+
+Please suggest edits to improve the code.
