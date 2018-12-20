@@ -326,7 +326,7 @@ def encode_message(path_script, source_letter_path, message, missing_file_flag):
             else:
                 modified_alphabet_name.extend(random_number1)
                 if location == random_seed2:
-                    modified_alphabet_name.extend('.k')
+                    modified_alphabet_name.extend('.')
 
         extension = ['.txt', '.zip', '.html', '.css', '.docx']
         modified_alphabet_name.extend(extension[randint(0, 4)])
