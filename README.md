@@ -1,5 +1,5 @@
 # Secret_message_encoder
-This script encodes message by letters in picture, and subsequently renames the picture by randomly generated numbers. Also deletes the extention and adds fake extention. Also changes pictures to hidden to completely encode the message. 
+This script encodes message visually by letters in picture, and subsequently renames the picture by randomly generated numbers. By deleting the extension, adding fake extension, and ultimately by hiding the individual character files; the message is encoded.
 
 ## Execution instructions
 -For encoding message only alphanumeric characters, blank space and dot(.) are allowed.
@@ -8,7 +8,7 @@ This script encodes message by letters in picture, and subsequently renames the 
 ### Working of Encoder.py
 - First user is prompted to enter a message.
 
-![Enter message](https://github.com/pks9862728888/Secret_message_encoder/blob/master/Screenshots/Encoder%2001.png)
+![Enter message](https://github.com/pks9862728888/Secret_message_encoder/blob/master/Screenshots/Encoder%2000.png)
 
 - Then the message is scanned for invalid characters(if any).
 - If invalid charactes are found then asked whether to encode the message by removing the invalid characters?
