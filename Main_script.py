@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import os
 import time
-from random import randint
+from random import random, randint, randrange, seed
 import shutil
 from shutil import get_terminal_size
 import urllib.request
@@ -300,7 +300,7 @@ def encode_message(path_script, source_letter_path, message, missing_file_flag):
 
     # Copying and encoding the the pictures by letters contained in message
     for index, letter in enumerate(message):
-        
+
         # Finding the alphabet name according to letter in message
         alphabet_name = full_source_alphabet_name[alphabets.index(letter)]
 
@@ -308,11 +308,34 @@ def encode_message(path_script, source_letter_path, message, missing_file_flag):
         os.chdir(source_letter_path)
         shutil.copy(alphabet_name, destination_path)
 
-        # Renaming alphabets after copying
+        # Renaming alphabets by generating cryptographic encoded names
         os.chdir(destination_path)
-        os.rename(alphabet_name, alphabets_new_names[index])
+
+        current_alphabet_name = alphabets_new_names[index].rstrip('.jpg')
+        random_number1 = str(int(random()*pow(10, randrange(20))))
+        random_seed1 = randint(0, len(current_alphabet_name) - 1)
+        seed(random_number1)
+        random_seed2 = randint(0, len(current_alphabet_name) - 1)
+
+        modified_alphabet_name = []
+
+        for location, character in enumerate(current_alphabet_name):
+            seed(random())
+            if location != random_seed1 or location != random_seed2:
+                modified_alphabet_name.extend(str(int(random() * pow(10, randrange(10)))) + character)
+            else:
+                modified_alphabet_name.extend(random_number1)
+                if location == random_seed2:
+                    modified_alphabet_name.extend('.k')
+
+        extension = ['.txt', '.zip', '.html', '.css', '.docx']
+        modified_alphabet_name.extend(extension[randint(0, 4)])
+        modified_alphabet_name = ''.join(modified_alphabet_name)
+        modified_alphabet_name = '.' + modified_alphabet_name
+
+        os.rename(alphabet_name, modified_alphabet_name)
         os.chdir(source_letter_path)
-        print("Encoded letter '{}' with name '{}' to '{}'".format(letter, alphabet_name, alphabets_new_names[index]))
+        print("Encoded letter '{}' with name '{}' to '{}'".format(letter, alphabet_name, modified_alphabet_name))
 
     # Changing back to initial directory
     os.chdir(path_script)
