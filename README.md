@@ -2,8 +2,8 @@
 This script encodes message visually by letters in picture, and subsequently renames the picture by randomly generated numbers. By deleting the extension, adding fake extension, and ultimately by hiding the individual character files; the message is encoded.
 
 ## Execution instructions
--For encoding message only alphanumeric characters, blank space and dot(.) are allowed.
--For decoding message the message folder should be placed in the folder from where the script is run for automatic detection of the Encoded messages folder. Else you will have to manually mention the location of encoded messages folder.
+- For encoding message only alphanumeric characters, blank space and dot(.) are allowed.
+- For decoding message the message folder should be placed in the folder from where the script is run for automatic detection of the Encoded messages folder. Else you will have to manually mention the location of encoded messages folder.
 
 ### Working of Encoder.py
 - First user is prompted to enter a message.
@@ -22,16 +22,16 @@ This script encodes message visually by letters in picture, and subsequently ren
 
 Each letter is encoded with a picture and subsequently the names are scrumbled and the pictures are hidden.
 
-Output folder: Encoded_message_output
+Output folder: *Encoded_message_output*
 
 If already a folder exists, then new output folder name is created.
 
 ### Encoding process
-Encoding the message is done by words present in word_names.txt file. If this file is not found, then the words are fetched from the internet from github link.
+Encoding the message is done by words present in *word_names.txt* file. If this file is not found, then the words are fetched from the internet from *word_names.txt* file present in this repository of GitHub.
 
 The encoding is done in three steps:
 1. First a random number is generated and then a random seed is generated to determine where the number will be inserted in encodable file name.
-2. Then after each character in name a random number is added.
+2. Then after each character in new file name a random number is added.
 3. Then .jpg extention is removed and fake extentions are added to the pictures.
 4. Finally a dot(.) is added to each picture names to render the letters invisible.
 5. Then the letters are renamed in output folder.
@@ -52,4 +52,4 @@ Decoding process is exactly opposite to that of Encoder.py. This script outputs 
 
 ![Output Folder After Decoding](https://github.com/pks9862728888/Secret_message_encoder/blob/master/Screenshots/Output%20after%20Decoding.png)
 
-Please suggest edits to improve the code.
+**Please suggest edits to improve the code. Thank you for your valuable time.**
