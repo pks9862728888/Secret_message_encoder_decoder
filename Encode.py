@@ -328,8 +328,8 @@ def encode_message(path_script, source_letter_path, message, missing_file_flag):
                 if location == random_seed2:
                     modified_alphabet_name.extend('.')
 
-        extension = ['.txt', '.zip', '.html', '.css', '.docx']
-        modified_alphabet_name.extend(extension[randint(0, 4)])
+        extension = ['.sys', '.ini']
+        modified_alphabet_name.extend(extension[randint(0, 1)])
         modified_alphabet_name = ''.join(modified_alphabet_name)
         modified_alphabet_name = '.' + modified_alphabet_name
 

@@ -224,7 +224,7 @@ def decode_file(decode_folder_path, path_script):
         modified_file_name = file
 
         # Removing fake extensions
-        extensions = ['.txt', '.zip', '.html', '.css', '.docx', '.jpg']
+        extensions = ['.sys', '.ini']
 
         for ext in extensions:
             if modified_file_name.endswith(ext):
