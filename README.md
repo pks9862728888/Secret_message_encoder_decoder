@@ -1,5 +1,5 @@
 # Secret_message_encoder
-This script encodes message visually by letters in picture, and subsequently renames the picture by randomly generated numbers. By deleting the extension, adding fake extension, and ultimately by hiding the individual character files; the message is encoded.
+This script encodes the message by letters in the picture and subsequently renames the picture by randomly generated numbers. Also deletes the extension and adds a fake extensions which are by-default hidden in Windows. Also changes pictures to hidden to completely encode the message. 
 
 ## Execution instructions
 - For encoding message, only alphanumeric characters, blank space and dot(.) are allowed.
